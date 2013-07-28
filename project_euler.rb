@@ -208,6 +208,52 @@ def prob13(nums)
   ans
 end
 
+def prob14
+  largest_chain = 0
+  for i in (800000..1000000)
+    if collatz_sequence(i) > largest_chain
+      largest_chain = collatz_sequence(i)
+      ans = i
+    end
+  end
+  p "#{ans} has a chain #{collatz_sequence(ans)} numbers long"
+  ans
+end
+
+def prob15 #How many such routes are there through a 20×20 grid?
+end
+
+def prob16 # What is the sum of the digits of the number 2^1000?
+  ans = 0
+  big_num = 2**1000
+  big_string = big_num.to_s.chars
+  big_string.each do |num|
+    ans += num.to_i
+  end
+  ans
+end
+
+
+def prob17 # If all the numbers from 1 to 1000 (one thousand) inclusive were written out in words, how many letters would be used?
+  one_ninetynine = []
+  one_9 = [3,3,4,4,4,3,5,5,4]
+  ten = [3]
+  eleven_twenty = [6,6, 8, 8, 7, 7, 9, 8, 8, 6]
+  twenty_ninty = [6, 6, 6, 5, 5, 7, 6, 6]
+  one_ninetynine << (one_9 * 9) << ten << eleven_twenty << (twenty_ninty * 8)
+  hundred_and = [10]
+  onethousand = [11]
+  one_to_onethousand = (one_ninetynine * 10) + (hundred_and * 9) + (one_9 * 9) + onethousand
+  one_to_onethousand.flatten.reduce(:+)
+end
+
+def prob18 #Find the maximum total from top to bottom of the triangle below:
+end
+
+def prob19 #How many Sundays fell on the first of the month during the twentieth century (1 Jan 1901 to 31 Dec 2000)?
+  year = 1901
+
+end
 
 
 
@@ -238,9 +284,16 @@ end
 # p prob11(@prob11_grid)
 # print 'Starting Problem 12: '
 # p prob12
- # print 'Starting Problem 13: '
- # p prob13(@problem_13_numbers)
-print 'Starting Problem 14: '
-p prob14
+# print 'Starting Problem 13: '
+# p prob13(@problem_13_numbers)
+# print 'Starting Problem 14: '
+# p prob14
+# print 'Starting Problem 15: '
+# p prob15
+# print 'Starting Problem 16: '
+# p prob16
+print 'Starting Problem 17: '
+p prob17
+
 
 

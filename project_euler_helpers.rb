@@ -99,4 +99,18 @@ def divisor_counter(n)
   divisors
 end
 
+def collatz_sequence(n)
+  sequence = [n]
+  while n != 1
+    if n.even?
+      n = n/2
+      sequence << n
+    else
+    n = ((3 * n) + 1)
+    sequence << n    
+    end
+  end
+  sequence.count
+end
+
 
