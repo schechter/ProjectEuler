@@ -79,38 +79,58 @@ end
 #   divisors = ['self']
 #   unless Prime.instance.prime?(n)
 #     for i in (1..n/2)
-#       if n % i == 0
-#         divisors << i
-#       end
-#     end
-#   end
-#   p "#{n} has #{divisors.count} divisors"
-#   divisors.count
-# end
+  #       if n % i == 0
+  #         divisors << i
+  #       end
+  #     end
+  #   end
+  #   p "#{n} has #{divisors.count} divisors"
+  #   divisors.count
+  # end
 
-def divisor_counter(n)
-  divisors = 2
-  require 'prime'
-  for i in (2..(n**0.5))
-    if n % i == 0
-      divisors += 2
+  def divisor_counter(n)
+    divisors = 2
+    require 'prime'
+    for i in (2..(n**0.5))
+      if n % i == 0
+        divisors += 2
+      end
     end
+    divisors
   end
-  divisors
-end
 
-def collatz_sequence(n)
-  sequence = [n]
-  while n != 1
-    if n.even?
-      n = n/2
-      sequence << n
+  def collatz_sequence(n)
+    sequence = [n]
+    while n != 1
+      if n.even?
+        n = n/2
+        sequence << n
+      else
+        n = ((3 * n) + 1)
+        sequence << n
+      end
+    end
+    sequence.count
+  end
+
+  def prob18recursion(triangle, current_node, paths, path_length) #Find the maximum total from top to bottom of the triangle below:
+    path_length = path_length || 0
+    path_length += triangle[current_node[0]][current_node[1]]
+    if current_node[0] == triangle.length- 1
+      return path_length
     else
-    n = ((3 * n) + 1)
-    sequence << n    
+    # unless current_node[0] == triangle.length-1
+      paths << prob18recursion(triangle, [current_node[0]+1, current_node[1]+1], paths, path_length)
+      paths << prob18recursion(triangle, [current_node[0]+1, current_node[1]], paths, path_length)
     end
   end
-  sequence.count
-end
 
+  def is_sunday(n)
+    if n % 7 == 0
+      1
+    else
+      0
+    end
+  end
 
+  
