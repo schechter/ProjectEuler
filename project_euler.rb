@@ -529,10 +529,19 @@ def prob32 #Find the sum of all products whose multiplicand/multiplier/product i
 end
 
 def prob34 #Find the sum of all numbers which are equal to the sum of the factorial of their digits.
-to_sum = []
-
-
-
+  to_sum = []
+  for i in (9..50000)
+    sum_of_digits_fact = 0
+    digits = i.to_s.chars
+    digits.each do |d|
+      # sum_of_digits_fact += factorial(d.to_i)
+      sum_of_digits_fact += @factorials1_9[d]
+    end
+    if i == sum_of_digits_fact
+      to_sum << i
+    end
+  end
+  to_sum.reduce(:+)
 end
 
 def prob40  #d1 × d10 × d100 × d1000 × d10000 × d100000 × d1000000  of 0.123456789101112 etc.
@@ -553,24 +562,134 @@ def prob40  #d1 × d10 × d100 × d1000 × d10000 × d100000 × d1000000  of 0.1
   num_array[0].to_i * num_array[99].to_i * num_array[999].to_i * num_array[9999].to_i * num_array[99999].to_i * num_array[999999].to_i
 end
 
-def prob179 #Find the number of integers 1 < n < 10**7, for which n and n + 1 have the same number of positive divisors. For example, 14 has the positive divisors 1, 2, 7, 14 while 15 has 1, 3, 5, 15.
-  ans = 0
+def prob41 #What is the largest n-digit pandigital prime that exists?
   require 'prime'
-  for i in (2..10**7)
-    if i % 50000 == 0
-      p i
+  n = Prime::Generator23.new
+  3000000.times {|i| n.next}
+  num = n.next
+  p " Starting @ #{num}"
+  ans = 0
+  while num < 987654322
+    if is_pandigital_n(num)
+      ans = num
+      p "Found #{ans}"
     end
-    unless Prime.prime?(i) || Prime.prime?(i+1)
-      last_divisor_count = 0
-      currnet_divisor_count = divisor_counter(i)
-      if currnet_divisor_count == last_divisor_count
-        ans +=1
-      end
-      last_divisor_count = currnet_divisor_count
+    num = n.next
+  end
+  ans
+end
+
+def prob42(words)  #how many are triangle words?
+  ans = 0
+  words.each do |word|
+    word_score = 0
+    letters = word.downcase.chars
+    letters.each do |letter|
+      word_score += @letters[letter]
+    end
+    if word_score > 465
+      p "#{word} has a score of #{word_score}, that's too high"
+    end
+    if @first_30_triangle_num.include? word_score
+      ans+=1
     end
   end
   ans
 end
+
+def prob45 #It can be verified that T285 = P165 = H143 = 40755. Find the next triangle number that is also pentagonal and hexagonal.
+  i = 286 #
+  while true
+    j = triangle_num_gen(i)
+    if  is_pentagonal(j) && is_hexagonal(j)  # there are more hexagonal matches so this order shaves off 10+ seconds about 1/3rd
+      return "#{j} is the #{i}th traingle number"
+    end
+    i +=1
+  end
+end
+
+def prob48
+  ans = 0
+  for i in (1..1000)
+    ans += i**i
+  end
+  ans
+end
+
+def prob49 #There are no arithmetic sequences made up of three 1-, 2-, or 3-digit primes, exhibiting this property, but there is one other 4-digit increasing sequence.  What 12-digit number do you form by concatenating the three terms in this sequence?
+  require 'prime'
+  for i in (1000..9950)
+    k, l = i+3330, i+6660
+    unless i == 1487
+      if same_digits(i,k,l) && Prime.prime?(i) && Prime.prime?(k) && Prime.prime?(k)
+        p "found one with #{i}, #{k}, and #{l}"
+      end
+    end
+  end
+end
+
+def prob52 #Find the smallest positive integer, x, such that 2x, 3x, 4x, 5x, and 6x, contain the same digits.
+  i = 10
+  while true
+    if same_digits_6numbers?(i, i*2, i*3, i*4, i*5, i*6)
+      return i
+    end
+    i+=1
+  end
+end
+
+def prob55
+  ans = 0
+  for i in (1..10000)
+    iteration = 1
+    num = i
+    while true
+      j = num + num.to_s.reverse.to_i
+      if is_palindrome(j.to_s.chars)
+        break
+      else
+        iteration +=1
+        num = j
+      end
+      if iteration == 55
+        ans +=1
+        break
+      end
+    end
+  end
+  ans
+end
+
+def prob56
+  max = 0 
+  for i in (1..100)
+    for j in (1..100)
+      k = digital_sum(i**j)
+      if k > max
+        max = k
+      end
+    end
+  end
+  max
+end
+
+def prob179 #Find the number of integers 1 < n < 10**7, for which n and n + 1 have the same number of positive divisors. For example, 14 has the positive divisors 1, 2, 7, 14 while 15 has 1, 3, 5, 15.
+  ans = 0  # At 8625000 there are 852656 consecutive divisors
+  last_divisor_count = 0
+  for i in (2..10**7-1)
+    if i % 75000 == 0
+      p "At #{i} there are #{ans} consecutive divisors  @#{Time.now}"
+    end
+    current_divisor_count = divisor_counter(i)
+    if current_divisor_count == last_divisor_count
+      ans +=1
+    end
+    last_divisor_count = current_divisor_count
+  end
+  ans
+end
+
+
 
 
 # print 'Starting Problem 1: '
@@ -633,10 +752,29 @@ end
 # p prob30
 # print 'starting problem 32: '
 # p prob32
+# print 'starting problem 34: '
+# p prob34
 # print 'starting problem 40: '
 # p prob40
+# print 'starting problem 41: '
+# p prob41
+# print 'starting problem 42: '
+# p prob42(@problem42_words)
+# print 'starting problem 45: '
+# p prob45
+# print 'starting problem 48: '
+# p prob48
+# print 'starting problem 49: '
+# p prob49
+# print 'starting problem 52: '
+# p prob52
+# print 'starting problem 55: '
+# p prob55
+# print 'starting problem 56: '
+# p prob56
 # print 'starting problem 179'
 # p prob179
+
 
 
 result = RubyProf.stop
