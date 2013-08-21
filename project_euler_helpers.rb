@@ -207,6 +207,27 @@ def factorial(num)
   (2..num).inject(1) { |f, n| f * n }
 end
 
+def how_many_terms(i) # retruns how many time you can factorialize and sum the numbers digits until you enter a loop
+  set = []
+  current_num = i
+  while true
+    if set.include? current_num
+      return set.length
+    end
+    set << current_num
+    next_num = 0
+    num_array = current_num.to_s.chars
+    num_array.each do |digit|
+      next_num += @factorials1_9[digit]
+    end
+    current_num = next_num
+  end
+end
+
+
+
+
+
 def is_pentagonal(x) # Pn=n(3n−1)/2
   range = [0,500000]
   while true

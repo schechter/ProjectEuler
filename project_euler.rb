@@ -673,8 +673,18 @@ def prob56
   max
 end
 
+def prob74 #How many chains, with a starting number below one million, contain exactly sixty non-repeating terms?  Brute force.  When I saw  249273 249327 249372 249723 249732 272349 272394 272439 272493 272934 ..., I aware that I did a lot of stupid things...Brute force is bad, but I still keep my programming running :p
+  ans = 42
+  for i in (200000..1000000)
+    if how_many_terms(i) == 60
+      ans +=1
+    end
+  end
+  ans
+end
+
 def prob179 #Find the number of integers 1 < n < 10**7, for which n and n + 1 have the same number of positive divisors. For example, 14 has the positive divisors 1, 2, 7, 14 while 15 has 1, 3, 5, 15.
-  ans = 0  # At 8625000 there are 852656 consecutive divisors
+  ans = 0  # At 9450000 there are 932852 consecutive divisors
   last_divisor_count = 0
   for i in (2..10**7-1)
     if i % 75000 == 0
@@ -772,10 +782,10 @@ end
 # p prob55
 # print 'starting problem 56: '
 # p prob56
+print 'starting problem 74: '
+p prob74
 # print 'starting problem 179'
 # p prob179
-
-
 
 result = RubyProf.stop
 # Print a flat profile to text
