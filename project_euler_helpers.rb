@@ -182,7 +182,7 @@ end
 
 def is_pandigital_n(num)
   num = num.to_s.chars.sort
-  if (num.length < 7) || (num.include? '0')
+  if num.include? '0'
     return false
   end
   case num.length
@@ -201,6 +201,18 @@ def is_pandigital_n(num)
   end
   false
 end
+
+def is_pandigital_array(array) # try this return false if n.to_s[0,9].chars.sort.join!='123456789'  
+  array.sort!
+  if array.include? '0'
+    return false
+  end
+  if array[0] =='1' && array[1] =='2' && array[2] =='3' && array[3] == '4' && array[4] =='5' && array[5] == '6' && array[6] =='7' && array[7] =='8' && array[8] =='9'
+    return true
+  end
+  false
+end
+
 
 
 def factorial(num)
@@ -250,25 +262,25 @@ def is_hexagonal(x) # Hn=n(2n−1)
   range = [0, 500000]
   while true
     test = (range[0] + range[1])/2
-           if (test * ((2*test) -1)) == x #found the hex number
-             return true
-           elsif (test * ((2*test) -1)) > x
-             range[1] = test
-           else
-             range[0] = test
-           end
-           if range[1] - range[0] <= 1
-             return false
-           end
-           end
-           end
+    if (test * ((2*test) -1)) == x #found the hex number
+      return true
+    elsif (test * ((2*test) -1)) > x
+      range[1] = test
+    else
+      range[0] = test
+    end
+    if range[1] - range[0] <= 1
+      return false
+    end
+  end
+end
 
-           def hexagonal_num_gen(n)
-             (n * ((2*n) -1))
-           end
+def hexagonal_num_gen(n)
+ (n * ((2*n) -1))
+end
 
-           def pentagonal_num_gen(n)
-             (n * ((3*n) -1)/2)
+def pentagonal_num_gen(n)
+  (n * ((3*n) -1)/2)
 end
 
 def same_digits(i,j,k)  #checks if the 3, 4 digit numbers have the same digits
@@ -506,4 +518,113 @@ def digital_sum(n)
   n.length.times {|i| n << n.shift.to_i}
   n.reduce(:+)
 end
-  
+
+def fib(n) #returns the nth fibinacci number
+  num = 0
+  num_next = 1
+  n.times do |i|
+    num, num_next = num_next, num + num_next
+  end
+  num
+end
+
+def compare_poker_hands(hand1, hand2) #take in two strings of 5 cards represented by 1-9,j-a/SHDC ie: 3H KD etc.
+  if what_is_hand(hand1)[0] > what_is_hand(hand2)[0]
+    return true
+  elsif what_is_hand(hand1)[0] < what_is_hand(hand2)[0]
+    return false
+  else
+    if what_is_hand(hand1)[1] > what_is_hand(hand2)[1]
+      return true
+    elsif what_is_hand(hand1)[1] < what_is_hand(hand2)[1]
+      return false
+    else
+      if what_is_hand(hand1)[2] > what_is_hand(hand2)[2]
+        return true
+      elsif what_is_hand(hand1)[2] < what_is_hand(hand2)[2]
+        return false
+      else
+        if what_is_hand(hand1)[3] > what_is_hand(hand2)[3]
+          return true
+        elsif what_is_hand(hand1)[3] < what_is_hand(hand2)[3]
+          return false
+        else
+          if what_is_hand(hand1)[4] > what_is_hand(hand2)[4]
+            return true
+          elsif what_is_hand(hand1)[4] < what_is_hand(hand2)[4]
+            return false
+          else
+            p "need more to figure out #{hand1} and #{hand2}, got #{what_is_hand(hand1)}, and #{what_is_hand(hand2)}"
+          end
+        end
+      end
+    end
+  end
+end
+
+
+#1 High Card: Highest value card.
+#2 One Pair: Two cards of the same value.
+#3 Two Pairs: Two different pairs.
+#4 Three of a Kind: Three cards of the same value.
+#5 Straight: All cards are consecutive values.
+#6 Flush: All cards of the same suit.
+#7 Full House: Three of a kind and a pair.
+#8 Four of a Kind: Four cards of the same value.
+#9 Straight Flush: All cards are consecutive values of same suit.
+#10 Royal Flush: Ten, Jack, Queen, King, Ace, in same suit.  THis is actually just a high straight flush
+
+
+
+def what_is_hand(cards) # 
+  card1 = cards[0..1].chars
+  card2 = cards[3..4].chars
+  card3 = cards[6..7].chars
+  card4 = cards[9..10].chars
+  card5 = cards[12..13].chars
+  card_nums = []
+  card_nums << @card_map[card1[0]] << @card_map[card2[0]] << @card_map[card3[0]] << @card_map[card4[0]] << @card_map[card5[0]]
+  card_nums.sort!  # an array of the number value of the cards in a row
+  count = Hash.new 0
+  card_nums.each do |card|
+    count[card] += 1
+  end  #hash count now has the card_value as key, and number of them in hand as the value
+  if (card_nums[0]+1 == card_nums[1]) && (card_nums[1]+1  == card_nums[2] ) && (card_nums[2]+1  == card_nums[3])  && (card_nums[3]+1  == card_nums[4]) 
+    if card1[1] == card2[1] && card2[1] == card3[1] && card3[1] == card4[1] && card4[1] == card5[1]  #straight flush
+      return [9, card_nums.last, @suit_map[card1[1]]]
+    end
+  end
+  if count.values.include? 4  #four of a kind
+    four_of = (count.select {|k,v| v ==4}).keys.first
+    high_card = (count.select {|k,v| v ==1}).keys.first
+    return [8, four_of, high_card]
+  end
+  if (count.values.include? 3) && (count.values.include? 2)  #full boat
+    three_of = (count.select {|k,v| v ==3}).keys.first
+    return [7, three_of, 1]
+  end
+  if card1[1] == card2[1] && card2[1] == card3[1] && card3[1] == card4[1] && card4[1] == card5[1] #flush
+    suit = @suit_map[card1[1]]
+    return [6, suit, card_nums[4]]
+  end
+  if (card_nums[0]+1 == card_nums[1]) && (card_nums[1]+1  == card_nums[2] ) && (card_nums[2]+1  == card_nums[3])  && (card_nums[3]+1  == card_nums[4]) #straight
+    return [5, card_nums[4], card_nums[3]]
+  end
+  if count.values.include? 3
+    three_of = (count.select {|k,v| v ==3}).keys.first
+    remaining_cards = card_nums.reject{|i| i == three_of}
+    return [4, three_of, 1]
+  end
+  if ((count.select {|k,v| v ==2}).keys.length == 2)  # two pair
+    pairs_of = (count.select {|k,v| v ==2}).keys.sort
+    high_card = (count.select {|k,v| v ==1}).keys.first
+    return [3, pairs_of[1], pairs_of[0], high_card]
+  end
+  if count.values.include? 2  #1 pair
+    pair_of = (count.select {|k,v| v ==2}).keys.first
+    remaining_cards = card_nums.reject{|i| i == pair_of}
+    return [2, pair_of, remaining_cards[2], remaining_cards[1], remaining_cards[0]]
+  end
+  return [1, card_nums.reverse].flatten  #high card
+end
+

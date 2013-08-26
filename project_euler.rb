@@ -565,7 +565,7 @@ end
 def prob41 #What is the largest n-digit pandigital prime that exists?
   require 'prime'
   n = Prime::Generator23.new
-  3000000.times {|i| n.next}
+  2500000.times {|i| n.next}
   num = n.next
   p " Starting @ #{num}"
   ans = 0
@@ -586,9 +586,6 @@ def prob42(words)  #how many are triangle words?
     letters = word.downcase.chars
     letters.each do |letter|
       word_score += @letters[letter]
-    end
-    if word_score > 465
-      p "#{word} has a score of #{word_score}, that's too high"
     end
     if @first_30_triangle_num.include? word_score
       ans+=1
@@ -638,6 +635,18 @@ def prob52 #Find the smallest positive integer, x, such that 2x, 3x, 4x, 5x, and
   end
 end
 
+def prob54
+  num_player_1_wins = 0
+  File.open('problem54_poker_hands.txt', 'r') do |f1|
+    f1.each do |line|
+      if compare_poker_hands(line[0..13], line[15..28])
+        num_player_1_wins +=1
+      end
+    end
+  end
+  num_player_1_wins
+end
+
 def prob55
   ans = 0
   for i in (1..10000)
@@ -661,7 +670,7 @@ def prob55
 end
 
 def prob56
-  max = 0 
+  max = 0
   for i in (1..100)
     for j in (1..100)
       k = digital_sum(i**j)
@@ -683,8 +692,64 @@ def prob74 #How many chains, with a starting number below one million, contain e
   ans
 end
 
+def prob104
+  term = 0
+  num = 0
+  num_next = 1
+  while true
+    term += 1
+    num, num_next = num_next, num + num_next
+    test = num.to_s.chars
+    first_9 = test[0..8]
+    last_9 = test[-9..-1]
+    if  is_pandigital_array(last_9) || is_pandigital_array(first_9)
+      p "F(#{term}), #{num} is the answe?"
+      return term
+    end
+    if term % 1000 == 0
+      p " At the #{term}th Fibinacci number"
+    end
+  end
+end
+
+def prob119 #You are given that a2 = 512 and a10 = 614656.  Find a30   5 + 1 + 2 = 8, and 83 = 512. Another example of a number with this property is 614656 = 284.
+  test = 10
+  a_of = 0
+  while a_of < 30
+    result = 0
+    digit_sum = digital_sum(test)
+    exponent = 1
+    unless digit_sum == 1
+      while result < test
+        result = digit_sum**exponent
+        if result == test
+          a_of +=1
+          p "found a(#{a_of}) with #{test} whose digital sum is #{digit_sum} and exponent was #{exponent}."
+        end
+        exponent +=1
+      end
+    end
+    test += 1
+  end
+  test
+end
+
+def prob119_1  ##You are given that a2 = 512 and a10 = 614656.  Find a30   5 + 1 + 2 = 8, and 83 = 512. Another example of a number with this property is 614656 = 284.   way better than one above!  0.22 seconds not days...
+  results = []
+  for i in (2..75)
+    for j in (2..9)
+      if digital_sum(i**j) == i
+        results << i**j
+      end
+    end
+  end
+  results.sort[29]
+end
+
+
+
 def prob179 #Find the number of integers 1 < n < 10**7, for which n and n + 1 have the same number of positive divisors. For example, 14 has the positive divisors 1, 2, 7, 14 while 15 has 1, 3, 5, 15.
-  ans = 0  # At 9450000 there are 932852 consecutive divisors
+  ans = 0  # 9825000 there are 969425 consecutive divisors
   last_divisor_count = 0
   for i in (2..10**7-1)
     if i % 75000 == 0
@@ -778,14 +843,22 @@ end
 # p prob49
 # print 'starting problem 52: '
 # p prob52
+print 'starting problem 54: '
+p prob54
 # print 'starting problem 55: '
 # p prob55
 # print 'starting problem 56: '
 # p prob56
-print 'starting problem 74: '
-p prob74
+# print 'starting problem 74: '
+# p prob74
+# print 'starting problem 104: '
+# p prob104
+# print 'starting problem 119: '
+# p prob119_1
 # print 'starting problem 179'
 # p prob179
+
+
 
 result = RubyProf.stop
 # Print a flat profile to text
