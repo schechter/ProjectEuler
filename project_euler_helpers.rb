@@ -181,21 +181,22 @@ def is_pandigital(a,b,c)  # takes 3 inputs, checks pandigital 1-9
 end
 
 def is_pandigital_n(num)
-  num = num.to_s.chars.sort
-  if num.include? '0'
-    return false
-  end
+  num = num.to_s.chars.sort.join
   case num.length
   when 7
-    if num[0] =='1' && num[1] =='2' && num[2] =='3' && num[3] == '4' && num[4] =='5' && num[5] == '6' && num[6] =='7'
+    if num == '1234567'
       return true
     end
   when 8
-    if num[0] =='1' && num[1] =='2' && num[2] =='3' && num[3] == '4' && num[4] =='5' && num[5] == '6' && num[6] =='7' && num[7] =='8'
+    if num == '12345678'
       return true
     end
   when 9
-    if num[0] =='1' && num[1] =='2' && num[2] =='3' && num[3] == '4' && num[4] =='5' && num[5] == '6' && num[6] =='7' && num[7] =='8' && num[8] =='9'
+    if num == '123456789'
+      return true
+    end
+  when 10
+    if num == '0123456789'
       return true
     end
   end
@@ -212,8 +213,6 @@ def is_pandigital_array(array) # try this return false if n.to_s[0,9].chars.sort
   end
   false
 end
-
-
 
 def factorial(num)
   (2..num).inject(1) { |f, n| f * n }
@@ -235,10 +234,6 @@ def how_many_terms(i) # retruns how many time you can factorialize and sum the n
     current_num = next_num
   end
 end
-
-
-
-
 
 def is_pentagonal(x) # Pn=n(3n−1)/2
   range = [0,500000]
@@ -553,28 +548,12 @@ def compare_poker_hands(hand1, hand2) #take in two strings of 5 cards represente
             return true
           elsif what_is_hand(hand1)[4] < what_is_hand(hand2)[4]
             return false
-          else
-            p "need more to figure out #{hand1} and #{hand2}, got #{what_is_hand(hand1)}, and #{what_is_hand(hand2)}"
           end
         end
       end
     end
   end
 end
-
-
-#1 High Card: Highest value card.
-#2 One Pair: Two cards of the same value.
-#3 Two Pairs: Two different pairs.
-#4 Three of a Kind: Three cards of the same value.
-#5 Straight: All cards are consecutive values.
-#6 Flush: All cards of the same suit.
-#7 Full House: Three of a kind and a pair.
-#8 Four of a Kind: Four cards of the same value.
-#9 Straight Flush: All cards are consecutive values of same suit.
-#10 Royal Flush: Ten, Jack, Queen, King, Ace, in same suit.  THis is actually just a high straight flush
-
-
 
 def what_is_hand(cards) # 
   card1 = cards[0..1].chars
@@ -626,5 +605,12 @@ def what_is_hand(cards) #
     return [2, pair_of, remaining_cards[2], remaining_cards[1], remaining_cards[0]]
   end
   return [1, card_nums.reverse].flatten  #high card
+end
+
+def is_right_triangle(a,b,c)
+  if a**2 + b**2 == c**2
+    return true
+  end
+  false
 end
 
