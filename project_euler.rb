@@ -563,6 +563,24 @@ def prob34 #Find the sum of all numbers which are equal to the sum of the factor
   to_sum.reduce(:+)
 end
 
+def prob35 # How many circular primes are there below one million?
+  num_of_circular_primes = 0
+  require 'prime'
+  Prime.each do |test|
+    if  test < 1000000
+      if test < 10
+        num_of_circular_primes +=1
+      end
+      if is_circular_prime(test.to_s.chars)
+        num_of_circular_primes +=1
+      end
+    else
+      break
+    end
+  end
+   num_of_circular_primes -4
+end
+
 def prob36 #Find the sum of all numbers, less than one million, which are palindromic in base 10 and base 2.
   ans = 0
   for i in (1..1000000)
@@ -571,6 +589,26 @@ def prob36 #Find the sum of all numbers, less than one million, which are palind
     end
   end
   ans
+end
+
+def prob37  #Find the sum of the only eleven primes that are both truncatable from left to right and right to left.
+  require 'prime'
+  found = 0
+  sum = 0
+  n = Prime::Generator23.new
+  4.times {|i|  n.next}
+  prime_number = n.next
+  while found != 11
+    if Prime.instance.prime?(prime_number)
+      if is_truncatable(prime_number)
+        found += 1
+        p "have found #{found} of the 11 with #{prime_number}"
+        sum += prime_number
+      end
+    end
+    prime_number = n.next
+  end
+  sum
 end
 
 def prob39 #For which value of p ≤ 1000, is the number of solutions maximised?
@@ -609,19 +647,14 @@ end
 
 def prob41 #What is the largest n-digit pandigital prime that exists?
   require 'prime'
-  n = Prime::Generator23.new
-  2500000.times {|i| n.next}
-  num = n.next
-  p " Starting @ #{num}"
   ans = 0
-  while num < 987654322
+  7654322.downto(0) do |num|
     if is_pandigital_n(num)
-      ans = num
-      p "Found #{ans}"
+      if Prime.prime?(num)
+        return num
+      end
     end
-    num = n.next
   end
-  ans
 end
 
 def prob42(words)  #how many are triangle words?
@@ -945,9 +978,8 @@ end
 # p prob13(@problem_13_numbers)
 # print 'Starting Problem 14: '
 # p prob14
-print 'Starting Problem 15: '  #need to make it smarter
-# p prob15([18,18], 20, 0)
-p solve_15
+# print 'Starting Problem 15: '  #need to make it smarter
+# p solve_15
 # print 'Starting Problem 16: '
 # p prob16
 # print 'Starting Problem 17: '
@@ -980,14 +1012,18 @@ p solve_15
 # p prob32
 # print 'starting problem 34: '
 # p prob34
+# print "starting problem 35: "
+# p prob35
 # print "starting problem 36: "
 # p prob36
+# print "starting problem 37: "
+# p prob37
 # print "starting problem 39: "
 # p prob39
 # print 'starting problem 40: '
 # p prob40
-# print 'starting problem 41: '
-# p prob41
+print 'starting problem 41: '
+p prob41
 # print 'starting problem 42: '
 # p prob42(@problem42_words)
 # print 'starting problem 43: '
