@@ -218,24 +218,23 @@ def prob14 #Which starting number, under one million, produces the longest chain
   ans
 end
 
-def prob15(start, grid_size, num_paths, itterations)
+def prob15(start, grid_size, num_paths)
   @num_paths = num_paths
-  @itterations = itterations
-  if @itterations == 0  # Only need to check half the routes.
-    @itterations += 1
-    prob15([start[0], start[1]+1], grid_size, @num_paths, @itterations)
+  if @problem15_knowns.keys.include? start
+    @num_paths += @problem15_knowns[start]
+    return @num_paths
   else
     if start[0] == grid_size && start[1] == grid_size
       @num_paths +=1
-      return start, @num_paths
+      return @num_paths
     end
     if start[0] == grid_size
-      prob15([start[0], start[1]+1], grid_size, @num_paths, @itterations)
+      prob15([start[0], start[1]+1], grid_size, @num_paths)
     elsif start[1] == grid_size
-      prob15([start[0]+1, start[1]], grid_size, @num_paths, @itterations)
+      prob15([start[0]+1, start[1]], grid_size, @num_paths)
     else
-      prob15([start[0], start[1]+1], grid_size, @num_paths, @itterations)
-      prob15([start[0]+1, start[1]], grid_size, @num_paths, @itterations)
+      prob15([start[0], start[1]+1], grid_size, @num_paths)
+      prob15([start[0]+1, start[1]], grid_size, @num_paths)
     end
   end
 end
@@ -732,7 +731,7 @@ def prob44
   answers = []
   for i in (0..2998)
     for j in (i..2999)
-      difference = @first_3000_pentagonal_numbers[i]-@first_3000_pentagonal_numbers[j]
+      difference = @first_3000_pentagonal_numbers[j]-@first_3000_pentagonal_numbers[i]
       sum = @first_3000_pentagonal_numbers[j]+@first_3000_pentagonal_numbers[i]
       if @first_3000_pentagonal_numbers.include? sum
         if @first_3000_pentagonal_numbers.include? difference
@@ -946,8 +945,9 @@ end
 # p prob13(@problem_13_numbers)
 # print 'Starting Problem 14: '
 # p prob14
-# print 'Starting Problem 15: '  #need to make it smarter
-# p prob15([0,0], 20, 0, 0)
+print 'Starting Problem 15: '  #need to make it smarter
+# p prob15([18,18], 20, 0)
+p solve_15
 # print 'Starting Problem 16: '
 # p prob16
 # print 'Starting Problem 17: '
@@ -970,8 +970,8 @@ end
 # p prob25
 # print 'starting problem 27'
 # p prob27
-print 'starting problem 28: '
-p prob28(1001)
+# print 'starting problem 28: '
+# p prob28(1001)
 # print 'starting problem 29'
 # prob29
 # print 'starting problem 30: '
@@ -1016,8 +1016,6 @@ p prob28(1001)
 # p prob119_1
 # print 'starting problem 179'
 # p prob179
-
-
 
 
 result = RubyProf.stop

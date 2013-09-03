@@ -614,3 +614,17 @@ def is_right_triangle(a,b,c)
   false
 end
 
+def solve_15
+  20.downto(0) do |i|
+    20.downto(0) do |j|
+      num_paths = prob15([i,j], 20, 0)
+      @problem15_knowns[[i,j]], @problem15_knowns[[j,i]] = num_paths, num_paths
+      if i == 0 and j == 0
+        return prob15([i,j], 20, 0)
+      end
+    end
+  end
+end
+
+
+
