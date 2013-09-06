@@ -578,7 +578,7 @@ def prob35 # How many circular primes are there below one million?
       break
     end
   end
-   num_of_circular_primes -4
+  num_of_circular_primes -4
 end
 
 def prob36 #Find the sum of all numbers, less than one million, which are palindromic in base 10 and base 2.
@@ -609,6 +609,17 @@ def prob37  #Find the sum of the only eleven primes that are both truncatable fr
     prime_number = n.next
   end
   sum
+end
+
+def prob38 # What is the largest 1 to 9 pandigital 9-digit number that can be formed as the concatenated product of an integer with (1,2, ... , n) where n > 1?
+  candidates = []
+  for i in (1..9999)# multiplied by 1-2
+    if is_pandigital_array((i*1).to_s.chars + (i*2).to_s.chars)
+      candidates << ((i*1).to_s.chars + (i*2).to_s.chars).join.to_i
+      p i
+    end
+  end
+  candidates.max
 end
 
 def prob39 #For which value of p ≤ 1000, is the number of solutions maximised?
@@ -760,21 +771,18 @@ def prob43 # d2d3d4=406 is divisible by 2 d3d4d5=063 is divisible by 3 d4d5d6=63
   sum
 end
 
-def prob44
-  answers = []
-  for i in (0..2998)
-    for j in (i..2999)
-      difference = @first_3000_pentagonal_numbers[j]-@first_3000_pentagonal_numbers[i]
-      sum = @first_3000_pentagonal_numbers[j]+@first_3000_pentagonal_numbers[i]
-      if @first_3000_pentagonal_numbers.include? sum
-        if @first_3000_pentagonal_numbers.include? difference
-          p "found one with #{i}, and #{j}"
-          answers << i-j
+def prob44  # Find the pair of pentagonal numbers, Pj and Pk, for which their sum and difference are pentagonal and D = |Pk − Pj| is minimised; what is the value of D?
+  for i in (1..1999)
+    for j in ((i+1)..3000)
+      difference = (@first_10000_pentagonal_numbers[j]-@first_10000_pentagonal_numbers[i]).abs
+      sum = @first_10000_pentagonal_numbers[j]+@first_10000_pentagonal_numbers[i]
+      if @is_pantagonal_hash[difference]
+        if @is_pantagonal_hash[sum]
+          return difference
         end
       end
     end
   end
-  answers
 end
 
 def prob45 #It can be verified that T285 = P165 = H143 = 40755. Find the next triangle number that is also pentagonal and hexagonal.
@@ -809,13 +817,29 @@ def prob49 #There are no arithmetic sequences made up of three 1-, 2-, or 3-digi
 end
 
 def prob52 #Find the smallest positive integer, x, such that 2x, 3x, 4x, 5x, and 6x, contain the same digits.
-  i = 10
+  i = 100
   while true
     if same_digits_6numbers?(i, i*2, i*3, i*4, i*5, i*6)
       return i
     end
     i+=1
   end
+end
+
+def prob53 #How many, not necessarily distinct, values of  nCr, for 1 ≤ n ≤ 100, are greater than one-million?
+  facts = {}
+  for i in (0..100)
+    facts[i] = factorial(i)
+  end
+  solutions = 0
+  for i in (1..100)
+    for j in (1..i)
+      if (facts[i]/(facts[j]*facts[i-j])) >1000000
+        solutions +=1
+      end
+    end
+  end
+  solutions
 end
 
 def prob54
@@ -865,6 +889,46 @@ def prob56
   max
 end
 
+def prob58 #what is the side length of the square spiral for which the ratio of primes along both diagonals first falls below 10%?
+  require 'prime'
+  numerator, denominator = 0.0,1.0
+  current_num_between_corners = 2
+  i = 1
+  while true
+    4.times do |j|
+      i += current_num_between_corners
+      unless j == 3
+        numerator +=1 if i.prime?
+      end
+    end
+    current_num_between_corners +=2
+    denominator += 4
+    if numerator/denominator < 0.10
+      return current_num_between_corners -1
+    end
+  end
+end
+
+def prob59
+  number_of_spaces = 0
+  best_key = nil
+  possible_codes = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'].combination(3)
+  possible_codes.each do |code|  #apply each code possibility to the array of numbers.  test for which one has the word 'the' the most times?  
+    key = code*401
+    translation = []
+    for i in (0..1200)
+      translation << ((key[i].ord)^@problem59_cypher[i]).chr
+    end
+    if translation.join.include?(' a ') > number_of_spaces
+      number_of_spaces = translation.count(' ')
+      best_key = key
+    end
+  end
+  for i in (0..1200)
+    print ((best_key[i].ord)^@problem59_cypher[i]).chr
+  end
+end
+
 def prob74 #How many chains, with a starting number below one million, contain exactly sixty non-repeating terms?  Brute force.  When I saw  249273 249327 249372 249723 249732 272349 272394 272439 272493 272934 ..., I aware that I did a lot of stupid things...Brute force is bad, but I still keep my programming running :p
   ans = 42
   for i in (200000..1000000)
@@ -885,9 +949,11 @@ def prob104
     test = num.to_s.chars
     first_9 = test[0..8]
     last_9 = test[-9..-1]
-    if  is_pandigital_array(last_9) && is_pandigital_array(first_9)
-      p "F(#{term}), #{num} is the answe?"
-      return term
+    if last_9
+      if  is_pandigital_array(last_9) && is_pandigital_array(first_9)
+        p "F(#{term}), #{num} is the answe?"
+        return term
+      end
     end
     if term % 1000 == 0
       p " At the #{term}th Fibinacci number"
@@ -1018,12 +1084,14 @@ end
 # p prob36
 # print "starting problem 37: "
 # p prob37
+# print "starting problem 38: "
+# p prob38
 # print "starting problem 39: "
 # p prob39
 # print 'starting problem 40: '
 # p prob40
-print 'starting problem 41: '
-p prob41
+# print 'starting problem 41: '
+# p prob41
 # print 'starting problem 42: '
 # p prob42(@problem42_words)
 # print 'starting problem 43: '
@@ -1038,12 +1106,18 @@ p prob41
 # p prob49
 # print 'starting problem 52: '
 # p prob52
+print 'starting problem 53: '
+p prob53
 # print 'starting problem 54: '
 # p prob54
 # print 'starting problem 55: '
 # p prob55
 # print 'starting problem 56: '
 # p prob56
+# print 'starting problem 58: '
+# p prob58
+# print 'starting problem 59: '
+# p prob59
 # print 'starting problem 74: '
 # p prob74
 # print 'starting problem 104: '
