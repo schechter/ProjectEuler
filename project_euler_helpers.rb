@@ -75,7 +75,7 @@ def triangle_num_gen(n)
 end
 
 
-def divisor_counter(n)
+def divisor_counter(n)  
   divisors = 2
   for i in (2..(n**0.5))
     if n % i == 0
@@ -83,6 +83,38 @@ def divisor_counter(n)
     end
   end
   divisors
+end
+
+
+def find_divisors(n) #not including 1 and self
+  divisors = []
+  for i in (1..(n**0.5))
+    if n % i == 0
+      divisors << i
+      divisors << n/i
+    end
+  end
+  divisors.delete(1)
+  divisors.uniq
+end
+
+def relatively_prime_counter(n)
+  num_relative_prime = 0
+  unless @divisors[n]
+    @divisors[n] = find_divisors(n)
+  end
+  for i in (1..(n-1))
+    unless @divisors[i]
+      @divisors[i] = find_divisors(i)
+    end
+    if (@divisors[n] & @divisors[i]).empty?
+      num_relative_prime +=1
+      if n.to_f/num_relative_prime < @max_value
+        break
+      end
+    end 
+  end
+  num_relative_prime
 end
 
 def collatz_sequence(n)
@@ -481,5 +513,14 @@ def count_primes(array)
     end
   end
   num_prime || 0
+end
+
+def area_of_triangle(a,b,c) # each point a,b and c are given as an array [x,y] with number -1000 through 1000  
+  ((a[0]*b[1] + b[0]*c[1] + c[0]*a[1])-(b[0]*a[1] + c[0]*b[1] + a[0]*c[1])).abs
+end
+
+def origin_in_triangle(a,b,c)
+  d =[0,0]
+  area_of_triangle(a,b,c) == (area_of_triangle(a,b,d) + area_of_triangle(a,d,c) + area_of_triangle(d,b,c))
 end
 

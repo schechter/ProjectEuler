@@ -2,7 +2,7 @@ require 'pry'
 require 'ruby-prof'
 require_relative 'project_euler_helpers'
 require_relative 'project_euler_inputs'
-RubyProf.start
+
 
 def prob1
   to_sum= []
@@ -929,6 +929,40 @@ def prob59
   end
 end
 
+def prob63 # How many n-digit positive integers exist which are also an nth power?
+  ans = 0
+  for i in (1..9)
+    j = 1
+    while true
+      if (i**j).to_s.length == j
+        ans +=1
+      else
+        break
+      end
+      j +=1
+    end
+  end
+  ans
+end
+
+def prob69 # Find the value of n ≤ 1,000,000 for which n/φ(n) is a maximum.
+  require 'prime'
+  @divisors ={1=>[]}
+  ans = 0
+  @max_value = 0
+  for i in (2..1_000_000).step(2)
+    p i
+    num_relative_primes = relatively_prime_counter(i)
+    value = i.to_f/num_relative_primes
+    if value > @max_value
+      @max_value = value
+      ans = i
+    end
+  end
+  ans
+end
+
+
 def prob74 #How many chains, with a starting number below one million, contain exactly sixty non-repeating terms?  Brute force.  When I saw  249273 249327 249372 249723 249732 272349 272394 272439 272493 272934 ..., I aware that I did a lot of stupid things...Brute force is bad, but I still keep my programming running :p
   ans = 42
   for i in (200000..1000000)
@@ -939,6 +973,42 @@ def prob74 #How many chains, with a starting number below one million, contain e
   ans
 end
 
+def prob81(start, path_value)
+  if start == [0,0]
+    return path_value
+  end
+  if start[0] == 0
+     prob81([start[0],start[1]-1],path_value+@problem81_matrix[start[0]][start[1]-1])
+  elsif start[1] ==0
+    prob81([start[0]-1,start[1]],path_value+@problem81_matrix[start[0]-1][start[1]]) 
+  else
+    # binding.pry
+    if @problem81_matrix[start[0]-1][start[1]] < @problem81_matrix[start[0]][start[1]-1]
+      p @problem81_matrix[start[0]-1][start[1]]
+      prob81([start[0]-1,start[1]],path_value+@problem81_matrix[start[0]-1][start[1]]) # go left
+    else
+      p @problem81_matrix[start[0]][start[1]-1]
+      prob81([start[0],start[1]-1],path_value+@problem81_matrix[start[0]][start[1]-1]) # got up
+    end
+  end
+end
+
+def prob102
+  triangles_with_origin = 0
+  File.open('problem102_triangles.txt', 'r') do |f1|
+    f1.each do |line|
+      t = line.chomp.split(',').map { |n| n.to_i  }
+      a = t[0..1]
+      b = t[2..3]
+      c = t[4..5]
+      if origin_in_triangle(a,b,c)
+        triangles_with_origin +=1
+      end
+    end
+  end
+  triangles_with_origin
+end
+    
 def prob104
   term = 0
   num = 0
@@ -1014,6 +1084,7 @@ end
 
 
 
+RubyProf.start
 # print 'Starting Problem 1: '
 # p prob1
 # print 'Starting Problem 2: '
@@ -1106,8 +1177,8 @@ end
 # p prob49
 # print 'starting problem 52: '
 # p prob52
-print 'starting problem 53: '
-p prob53
+# print 'starting problem 53: '
+# p prob53
 # print 'starting problem 54: '
 # p prob54
 # print 'starting problem 55: '
@@ -1118,17 +1189,24 @@ p prob53
 # p prob58
 # print 'starting problem 59: '
 # p prob59
+# print 'starting problem 63: '
+# p prob63
+# print 'starting problem 69: '
+# p prob69
 # print 'starting problem 74: '
 # p prob74
+# print 'starting problem 81: '
+# p prob81([79,79],7981)
 # print 'starting problem 104: '
 # p prob104
+print 'starting problem 102: '
+p prob102
 # print 'starting problem 119: '
 # p prob119_1
 # print 'starting problem 179'
 # p prob179
-
-
 result = RubyProf.stop
+
 # Print a flat profile to text
 printer = RubyProf::FlatPrinter.new(result)
 printer.print(STDOUT)
