@@ -92,10 +92,10 @@ def find_divisors(n) #not including 1 and self
     if n % i == 0
       divisors << i
       divisors << n/i
-    end
-  end
-  divisors.delete(1)
-  divisors.uniq
+end
+end
+divisors.delete(1)
+divisors.uniq
 end
 
 def relatively_prime_counter(n)
@@ -112,7 +112,7 @@ def relatively_prime_counter(n)
       if n.to_f/num_relative_prime < @max_value
         break
       end
-    end 
+    end
   end
   num_relative_prime
 end
@@ -122,13 +122,13 @@ def collatz_sequence(n)
   while n != 1
     if n.even?
       n = n/2
-  sequence << n
-  else
-    n = ((3 * n) + 1)
-    sequence << n
+      sequence << n
+    else
+      n = ((3 * n) + 1)
+      sequence << n
+    end
   end
-end
-sequence.count
+  sequence.count
 end
 
 def prob18recursion(triangle, current_node, paths, path_length) #Find the maximum total from top to bottom of the triangle below:
@@ -292,25 +292,25 @@ def is_hexagonal(x) # Hn=n(2n−1)
   range = [0, 500000]
   while true
     test = ((range[0] + range[1])/2)
-    if (test * ((2*test) -1)) == x #found the hex number
-      return true
-    elsif (test * ((2*test) -1)) > x
-      range[1] = test
-    else
-      range[0] = test
-    end
-    if range[1] - range[0] <= 1
-      return false
+      if (test * ((2*test) -1)) == x #found the hex number
+        return true
+      elsif (test * ((2*test) -1)) > x
+        range[1] = test
+      else
+        range[0] = test
+      end
+      if range[1] - range[0] <= 1
+        return false
+      end
     end
   end
-end
 
-def hexagonal_num_gen(n)
-  (n * ((2*n) -1))
-end
+  def hexagonal_num_gen(n)
+    (n * ((2*n) -1))
+  end
 
-def pentagonal_num_gen(n)
-  (n * ((3*n) -1)/2)
+  def pentagonal_num_gen(n)
+    (n * ((3*n) -1)/2)
 end
 
 def same_digits(i,j,k)  #checks if the 3, 4 digit numbers have the same digits
@@ -494,33 +494,45 @@ def is_circular_prime(array)
 end
 
 def percent_prime_from_array(array)
-  require 'prime'
-  num_prime = 0.0
-  array.each do |num|
-    if Prime.prime?(num)
-      num_prime += 1
-    end
-  end
-  num_prime/array.length
+ require 'prime'
+ num_prime = 0.0
+ array.each do |num|
+   if Prime.prime?(num)
+     num_prime += 1
+   end
+ end
+ num_prime/array.length
 end
 
 def count_primes(array)
-  require 'prime'
-  num_prime = 0.0
-  array.each do |num|
-    if num.prime?
-      num_prime += 1
-    end
-  end
-  num_prime || 0
+ require 'prime'
+ num_prime = 0.0
+ array.each do |num|
+   if num.prime?
+     num_prime += 1
+   end
+ end
+ num_prime || 0
 end
 
-def area_of_triangle(a,b,c) # each point a,b and c are given as an array [x,y] with number -1000 through 1000  
-  ((a[0]*b[1] + b[0]*c[1] + c[0]*a[1])-(b[0]*a[1] + c[0]*b[1] + a[0]*c[1])).abs
+def area_of_triangle(a,b,c) # each point a,b and c are given as an array [x,y] with number -1000 through 1000
+ ((a[0]*b[1] + b[0]*c[1] + c[0]*a[1])-(b[0]*a[1] + c[0]*b[1] + a[0]*c[1])).abs
 end
 
 def origin_in_triangle(a,b,c)
-  d =[0,0]
-  area_of_triangle(a,b,c) == (area_of_triangle(a,b,d) + area_of_triangle(a,d,c) + area_of_triangle(d,b,c))
+ d =[0,0]
+ area_of_triangle(a,b,c) == (area_of_triangle(a,b,d) + area_of_triangle(a,d,c) + area_of_triangle(d,b,c))
 end
 
+def is_bouncy_number(n)
+  ups_and_downs = []
+  array = n.to_s.chars
+  (array.length-1).times do |i|
+    ups_and_downs << (array[i] <=> array[i+1])
+    # binding.pry
+    if (ups_and_downs.include? -1) && (ups_and_downs.include? 1)
+      return true
+    end
+  end
+  false
+end

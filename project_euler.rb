@@ -1031,6 +1031,32 @@ def prob104
   end
 end
 
+def prob112
+  bouncy_numbers = 0
+  current_number = 99
+  while true
+    if is_bouncy_number(current_number)
+      bouncy_numbers += 1
+    end
+    ratio = bouncy_numbers.to_f / current_number
+    if ratio == 0.99
+      return current_number
+    end
+    current_number +=1
+  end
+end
+
+def prob113
+  non_bouncy = 0
+  for i in (1..(10**100))  # yea ringht!!!
+    unless is_bouncy_number(i)
+      p non_bouncy += 1
+    end
+  end
+  non_bouncy
+end
+
+
 def prob119 #You are given that a2 = 512 and a10 = 614656.  Find a30   5 + 1 + 2 = 8, and 83 = 512. Another example of a number with this property is 614656 = 284.
   test = 10
   a_of = 0
@@ -1199,13 +1225,21 @@ RubyProf.start
 # p prob81([79,79],7981)
 # print 'starting problem 104: '
 # p prob104
-print 'starting problem 102: '
-p prob102
+# print 'starting problem 102: '
+# p prob102
+# print 'starting problem 112: '
+# p prob112
+print 'starting problem 113: '
+p prob113
 # print 'starting problem 119: '
 # p prob119_1
 # print 'starting problem 179'
 # p prob179
 result = RubyProf.stop
+
+
+
+
 
 # Print a flat profile to text
 printer = RubyProf::FlatPrinter.new(result)
