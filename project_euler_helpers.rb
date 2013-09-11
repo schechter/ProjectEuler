@@ -74,7 +74,6 @@ def triangle_num_gen(n)
   (n * (n + 1 ))/2
 end
 
-
 def divisor_counter(n)  
   divisors = 2
   for i in (2..(n**0.5))
@@ -85,17 +84,16 @@ def divisor_counter(n)
   divisors
 end
 
-
 def find_divisors(n) #not including 1 and self
   divisors = []
   for i in (1..(n**0.5))
     if n % i == 0
       divisors << i
       divisors << n/i
-end
-end
-divisors.delete(1)
-divisors.uniq
+    end
+  end
+  divisors.delete(1)
+  divisors.uniq
 end
 
 def relatively_prime_counter(n)
@@ -287,30 +285,29 @@ def is_pentagonal(x) # Pn=n(3n−1)/2
   end
 end
 
-
 def is_hexagonal(x) # Hn=n(2n−1)
   range = [0, 500000]
   while true
     test = ((range[0] + range[1])/2)
-      if (test * ((2*test) -1)) == x #found the hex number
-        return true
-      elsif (test * ((2*test) -1)) > x
-        range[1] = test
-      else
-        range[0] = test
-      end
-      if range[1] - range[0] <= 1
-        return false
-      end
+    if (test * ((2*test) -1)) == x #found the hex number
+      return true
+    elsif (test * ((2*test) -1)) > x
+      range[1] = test
+    else
+      range[0] = test
+    end
+    if range[1] - range[0] <= 1
+      return false
     end
   end
+end
 
-  def hexagonal_num_gen(n)
-    (n * ((2*n) -1))
-  end
+def hexagonal_num_gen(n)
+  (n * ((2*n) -1))
+end
 
-  def pentagonal_num_gen(n)
-    (n * ((3*n) -1)/2)
+def pentagonal_num_gen(n)
+  (n * ((3*n) -1)/2)
 end
 
 def same_digits(i,j,k)  #checks if the 3, 4 digit numbers have the same digits
@@ -328,12 +325,12 @@ def same_digits(i,j,k)  #checks if the 3, 4 digit numbers have the same digits
 end
 
 def same_digits_6numbers?(i,j,k,l,m,n) 
-   i, j, k, l, m, n =  i.to_s.chars.sort, j.to_s.chars.sort, k.to_s.chars.sort, l.to_s.chars.sort, m.to_s.chars.sort, n.to_s.chars.sort
-   unless i == j && i == k && i == l && i == m && i == n
+  i, j, k, l, m, n =  i.to_s.chars.sort, j.to_s.chars.sort, k.to_s.chars.sort, l.to_s.chars.sort, m.to_s.chars.sort, n.to_s.chars.sort
+  unless i == j && i == k && i == l && i == m && i == n
     return false
   end
   true
- end
+end
 
 def digital_sum(n)
   n = n.to_s.chars
@@ -525,14 +522,18 @@ def origin_in_triangle(a,b,c)
 end
 
 def is_bouncy_number(n)
-  ups_and_downs = []
+  up = false
+  down = false
   array = n.to_s.chars
   (array.length-1).times do |i|
-    ups_and_downs << (array[i] <=> array[i+1])
-    # binding.pry
-    if (ups_and_downs.include? -1) && (ups_and_downs.include? 1)
-      return true
+    if (array[i] <=> array[i+1]) == 1
+      down = true
+    elsif (array[i] <=> array[i+1]) == -1
+      up  = true
     end
+  end
+  if up && down
+    return true
   end
   false
 end

@@ -945,12 +945,29 @@ def prob63 # How many n-digit positive integers exist which are also an nth powe
   ans
 end
 
+def prob67 #big triangle largest path
+  triangle = []
+  File.open('yodle_triangle.txt', 'r') do |lines|
+    lines.each do |line|
+      triangle << line.split(' ').map {|i| i.to_i}
+    end
+  end
+  # for each row starting with the second to botton, each number is replaced by the larger of the two possibilities, itslef, pluss the larger of down and to the right or left.
+  98.downto(0) do |row|
+    triangle[row].each_with_index do |number, i|
+      triangle[row][i] = [triangle[row + 1][i + 1], triangle[row + 1][i]].max + number
+    end
+  end
+  triangle[0][0]
+end
+
+
 def prob69 # Find the value of n ≤ 1,000,000 for which n/φ(n) is a maximum.
   require 'prime'
   @divisors ={1=>[]}
   ans = 0
   @max_value = 0
-  for i in (2..1_000_000).step(2)
+  for i in (10..1_000_000).step(10)
     p i
     num_relative_primes = relatively_prime_counter(i)
     value = i.to_f/num_relative_primes
@@ -982,7 +999,6 @@ def prob81(start, path_value)
   elsif start[1] ==0
     prob81([start[0]-1,start[1]],path_value+@problem81_matrix[start[0]-1][start[1]]) 
   else
-    # binding.pry
     if @problem81_matrix[start[0]-1][start[1]] < @problem81_matrix[start[0]][start[1]-1]
       p @problem81_matrix[start[0]-1][start[1]]
       prob81([start[0]-1,start[1]],path_value+@problem81_matrix[start[0]-1][start[1]]) # go left
@@ -1217,8 +1233,10 @@ RubyProf.start
 # p prob59
 # print 'starting problem 63: '
 # p prob63
-# print 'starting problem 69: '
-# p prob69
+# print 'starting problem 67: '
+# p prob67
+print 'starting problem 69: '
+p prob69
 # print 'starting problem 74: '
 # p prob74
 # print 'starting problem 81: '
@@ -1229,8 +1247,8 @@ RubyProf.start
 # p prob102
 # print 'starting problem 112: '
 # p prob112
-print 'starting problem 113: '
-p prob113
+# print 'starting problem 113: '
+# p prob113
 # print 'starting problem 119: '
 # p prob119_1
 # print 'starting problem 179'
